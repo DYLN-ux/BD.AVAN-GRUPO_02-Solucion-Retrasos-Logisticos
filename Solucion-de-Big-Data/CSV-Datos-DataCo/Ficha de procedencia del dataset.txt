@@ -1,0 +1,29 @@
+Ficha de procedencia del dataset
+
+| Campo | Valor |
+|---|---|
+| Nombre | DataCo Supply Chain Dataset (DataCoSupplyChainDataset.csv) |
+| Fuente original | Mendeley Data, versión 5 |
+| Copia utilizada | Kaggle |
+| Enlace de descarga | https://www.kaggle.com/datasets/shashwatwork/dataco-smart-supply-chain-for-big-data-analysis |
+| Fecha de descarga | 06/10/2026 |
+| Licencia / condiciones de uso | CC0: Public Domain |
+| Autores / cita |Shashwat Tiwari. DataCo SMART SUPPLY CHAIN FOR BIG DATA ANALYSIS. Kaggle. |
+| Tamaño del archivo | 95 910 149 bytes (≈ 91 MB) |
+| Estructura | 180 519 filas × 53 columnas; cada fila es un ítem de pedido |
+| Pedidos únicos | 65 752 |
+| Codificación | ISO-8859-1 (latin-1) |
+| Formato en el repositorio | .zip (contiene el .csv) |
+
+## Descripción
+Datos de una cadena de suministro con pedidos, clientes, productos, envíos, ventas,
+beneficio y retrasos de entrega. Se usa en la solución BI (SQL Server y Power BI) y en la
+solución Big Data (Apache Spark en Databricks).
+
+## Tratamiento posterior
+El dataset original no se modifica. La limpieza y la preparación se describen en los scripts
+de la solución BI y en el notebook de la solución Big Data.
+
+## Integridad (opcional)
+SHA-256:fa6d022ed437155e1a2f0378710602848703c8a7f203f7ff5d77805bf8480aa6
+
