@@ -1,0 +1,5 @@
+escala,tabla,filas,ingesta_seg,ingesta_filas_por_seg
+1,exp02_escala_1x,180519,12.11,14903
+2,exp02_escala_2x,361038,4.0,90219
+5,exp02_escala_5x,902595,4.01,225090
+10,exp02_escala_10x,1805190,4.95,364959
