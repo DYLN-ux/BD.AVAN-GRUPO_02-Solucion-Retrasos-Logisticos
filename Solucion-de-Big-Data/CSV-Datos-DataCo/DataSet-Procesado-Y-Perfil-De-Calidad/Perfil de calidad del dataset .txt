@@ -1,0 +1,77 @@
+# Perfil de calidad del dataset procesado (solución Big Data)
+
+Fuente: notebook Solucion_BigData_DataCo_Spark (Databricks Free Edition, cómputo serverless), ejecutado el 23/11/2026.
+Versión de Spark: 4.2.0 (registrada en la ejecución de EXP-02 con el mismo cómputo).
+Tabla procesada: tb_supply_chain (Delta, Unity Catalog workspace.default).
+
+## 1. Volumen
+| Medida | Original (CSV) | Procesado (tb_supply_chain) |
+|---|---|---|
+| Filas (ítems de pedido) | 180 519 | 180 519 |
+| Columnas | 53 | 51 |
+| Pedidos únicos (order_id) | — | 65 752 |
+| Codificación | ISO-8859-1 (se indica al leer el CSV) | Texto Unicode en la tabla Delta |
+
+## 2. Valores nulos en el original
+| Columna | Nulos | % |
+|---|---|---|
+| Product Description | 180 519 | 100.00 |
+| Order Zipcode | 155 679 | 86.24 |
+| Customer Lname | 8 | 0.00 |
+| Customer Zipcode | 3 | 0.00 |
+
+El resto de columnas no tiene nulos.
+
+## 3. Transformaciones aplicadas
+| Acción | Detalle | Motivo |
+|---|---|---|
+| Renombrar | 53 columnas a minúsculas con guion bajo (Days for shipping (real) → days_for_shipping_real) | Nombres sin espacios ni paréntesis; permite guardar la tabla |
+| Eliminar | product_description, order_zipcode | 100 % y 86.24 % nulas |
+| Eliminar | customer_email, customer_password, customer_street | Datos personales o sensibles, sin valor analítico |
+| Eliminar | product_image | URL sin valor analítico |
+| Convertir | order_date_dateorders y shipping_date_dateorders (texto) a timestamp | Permite análisis por fecha |
+| Derivar | order_year, order_month, year_month, shipping_delay_days | Análisis temporal y retraso (real − programado) |
+
+Resultado de la conversión de fechas: order_date nulas = 0; shipping_date nulas = 0.
+
+## 4. Rangos de variables numéricas (original)
+| Variable | Mín | Máx | Media |
+|---|---|---|---|
+| Sales| 9.99 | 1 999.99 | 203.77 |
+| Order Item Total | 7.49 | 1 939.99 | 183.11 |
+| Order Profit Per Order | −4 274.98 | 911.80 | 21.97 |
+| Days for shipping (real) | 0 | 6 | 3.50 |
+| Days for shipment (scheduled) | 0 | 4 | 2.93 |
+
+Observación: Order Profit Per Order tiene valores negativos (pérdidas por pedido); son datos reales del dataset y no se eliminaron.
+
+## 5. Distribución de la variable de interés
+| delivery_status | Ítems |
+|---|---|
+| Late delivery | 98 977 |
+| Advance shipping | 41 592 |
+| Shipping on time | 32 196 |
+| Shipping canceled | 7 754 |
+| **Total** | **180 519** |
+
+Entregas con riesgo de retraso (late_delivery_risk = 1): 98 977 (54.83 %).
+
+## 6. Unicidad
+Clave (order_id, order_item_id): 0 duplicados en la escala 1× del experimento EXP-02 (180 519 filas).
+
+## 7. Diferencia con la solución BI
+La solución Big Data conserva las 180 519 filas. El Data Mart de la solución BI carga 180 511 filas, porque excluye 8 filas con Customer Lname nulo.
+
+## 8. Muestra del dataset procesado
+Archivo: muestra_tb_supply_chain.csv.
+
+| Medida | Valor |
+|---|---|
+| Filas | 1 000 (primeras 1 000 de la tabla, limit(1000)) |
+| Columnas | 51 (las mismas de tb_supply_chain) |
+| Columnas eliminadas presentes | Ninguna (customer_email, customer_password, customer_street, product_description, `order_zipcode`, product_image) |
+| Nulos | 0 |
+| Claves (order_id, order_item_id) duplicadas | 0 |
+| Rango de order_date | 06/01/2015 a 31/01/2018 |
+
+Nota: la muestra incluye customer_fname y customer_lname, que provienen del dataset público original (licencia CC0). Es un extracto, no representa por sí sola la distribución del dataset completo.
